@@ -77,13 +77,45 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            const SizedBox(height: 32),
+            // Top Logo
+            Padding(
+              padding: const EdgeInsets.only(top: 32, bottom: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.movie, color: Color(0xFF7F0DF2), size: 32),
+                  SizedBox(width: 8),
+                  Text(
+                    'CineMatch',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Carousel
             Expanded(
               child: GestureDetector(
-                onTapDown: (_) { _isUserDragging = true; _stopAutoSlide(); },
-                onTapUp: (_) { _isUserDragging = false; _startAutoSlide(); },
-                onHorizontalDragStart: (_) { _isUserDragging = true; _stopAutoSlide(); },
-                onHorizontalDragEnd: (_) { _isUserDragging = false; _startAutoSlide(); },
+                onTapDown: (_) {
+                  _isUserDragging = true;
+                  _stopAutoSlide();
+                },
+                onTapUp: (_) {
+                  _isUserDragging = false;
+                  _startAutoSlide();
+                },
+                onHorizontalDragStart: (_) {
+                  _isUserDragging = true;
+                  _stopAutoSlide();
+                },
+                onHorizontalDragEnd: (_) {
+                  _isUserDragging = false;
+                  _startAutoSlide();
+                },
                 child: PageView.builder(
                   controller: _pageController,
                   itemCount: _onboardingItems.length,
@@ -93,23 +125,88 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                _onboardingItems.length,
-                    (index) => AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  margin: const EdgeInsets.symmetric(horizontal: 6),
-                  height: 8,
-                  width: _currentPage == index ? 24 : 8,
-                  decoration: BoxDecoration(
-                    color: _currentPage == index ? const Color(0xFF7F0DF2) : const Color(0xFF473B54),
-                    borderRadius: BorderRadius.circular(4),
+
+            // Page Indicators
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  _onboardingItems.length,
+                      (index) => AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    margin: const EdgeInsets.symmetric(horizontal: 6),
+                    height: 8,
+                    width: _currentPage == index ? 24 : 8,
+                    decoration: BoxDecoration(
+                      color: _currentPage == index
+                          ? const Color(0xFF7F0DF2)
+                          : const Color(0xFF473B54),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+
+            // Get Started Button
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+              child: SizedBox(
+                width: double.infinity,
+                height: 48,
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Navigate to login or home later
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF7F0DF2),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Text(
+                    'Get Started',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            // Login Link
+            Padding(
+              padding: const EdgeInsets.only(bottom: 24, top: 4),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Already have an account? ',
+                    style: TextStyle(
+                      color: Color(0xFFAB9CBA),
+                      fontSize: 14,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      // Navigate to login page later
+                    },
+                    child: const Text(
+                      'Log In',
+                      style: TextStyle(
+                        color: Color(0xFF7F0DF2),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
