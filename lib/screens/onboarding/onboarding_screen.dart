@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'onboarding_card.dart';
 import 'onboarding_item.dart';
+import '../login/login_screen.dart';
+import '../signup/signup_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -69,6 +71,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     _autoSlideTimer?.cancel();
     _pageController.dispose();
     super.dispose();
+  }
+  void _navigateToSignUp() {
+    // TODO: Create and navigate to signup screen
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const SignUpScreen()),
+    );
+  }
+
+  void _navigateToLogin() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
+    );
   }
 
   @override
@@ -156,9 +172,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 width: double.infinity,
                 height: 48,
                 child: ElevatedButton(
-                  onPressed: () {
-                    // Navigate to login or home later
-                  },
+                  onPressed:_navigateToSignUp,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF7F0DF2),
                     foregroundColor: Colors.white,
@@ -180,31 +194,33 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             // Login Link
             Padding(
               padding: const EdgeInsets.only(bottom: 24, top: 4),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'Already have an account? ',
+              child: TextButton(
+                onPressed: _navigateToLogin,
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  minimumSize: const Size(0, 40),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: RichText(
+                  text: const TextSpan(
+                    text: 'Already have an account? ',
                     style: TextStyle(
                       color: Color(0xFFAB9CBA),
                       fontSize: 14,
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      // Navigate to login page later
-                    },
-                    child: const Text(
-                      'Log In',
-                      style: TextStyle(
-                        color: Color(0xFF7F0DF2),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        decoration: TextDecoration.underline,
+                    children: [
+                      TextSpan(
+                        text: 'Log In',
+                        style: TextStyle(
+                          color: Color(0xFF7F0DF2),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          decoration: TextDecoration.underline,
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ],
