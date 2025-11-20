@@ -1,13 +1,32 @@
 {
   "project_info": {
-    "project_number": "169986075332",
-    "project_id": "movie-managment-b8620",
-    "storage_bucket": "movie-managment-b8620.firebasestorage.app"
+    "project_number": "891908407810",
+    "project_id": "movies-c699a",
+    "storage_bucket": "movies-c699a.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:169986075332:android:73735050e5c8804be23791",
+        "mobilesdk_app_id": "1:891908407810:android:c3167ef1a49d8ee2c79d1b",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDn0XfU_LqVm9Gaqa2n2Zbo6nWFQI00gVM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:891908407810:android:6e147d597c1f1a9ac79d1b",
         "android_client_info": {
           "package_name": "com.example.movie_projet"
         }
@@ -15,7 +34,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCltrNKupFPgvU4RZPTvyn4_PMo6uhazFQ"
+          "current_key": "AIzaSyDn0XfU_LqVm9Gaqa2n2Zbo6nWFQI00gVM"
         }
       ],
       "services": {

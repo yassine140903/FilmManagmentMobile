@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../service/login_services.dart';
+import '../login/login_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,6 +13,26 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _searchController = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   String _selectedGenre = 'All';
+
+  final AuthService _authService = AuthService();
+  void _logout() async {
+  await _authService.signOut();
+
+  if (!mounted) return;
+
+  // Optional feedback
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(content: Text('Logged out successfully')),
+  );
+
+  // Navigate to login screen and remove all previous routes
+  Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(builder: (_) => const LoginScreen()),
+    (route) => false,
+  );
+}
+
 
   final List<String> _genres = [
     'All',
@@ -414,11 +436,7 @@ class _HomeScreenState extends State<HomeScreen> {
             _buildDrawerItem(
               icon: Icons.logout,
               title: 'Logout',
-              onTap: () {
-                Navigator.pop(context);
-                // Handle logout
-                _showLogoutDialog();
-              },
+              onTap:_logout
             ),
             const SizedBox(height: 32),
           ],

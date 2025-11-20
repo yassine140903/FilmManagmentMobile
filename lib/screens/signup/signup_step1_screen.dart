@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import '../login/login_screen.dart';
+import 'signup_step2_screen.dart';
+import '../../service/login_services.dart';
 
-class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key});
+class SignUpStep1Screen extends StatefulWidget {
+  const SignUpStep1Screen({super.key});
 
   @override
-  State<SignUpScreen> createState() => _SignUpScreenState();
+  State<SignUpStep1Screen> createState() => _SignUpStep1ScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
-  final TextEditingController _fullNameController = TextEditingController();
+class _SignUpStep1ScreenState extends State<SignUpStep1Screen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
@@ -17,15 +17,44 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
 
+  final AuthService _authService = AuthService();
+
+
   @override
   void dispose() {
-    _fullNameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
   }
 
+  void _signup() async {
+  final result = await _authService.signup(
+    email: _emailController.text,
+    password: _passwordController.text,
+    confirmPassword: _confirmPasswordController.text,
+  );
+
+  if (!mounted) return;
+
+  if (result != null) {
+    // Show error
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(result)),
+    );
+  } else {
+    // Success → Navigate
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => SignUpStep2Screen(
+          email: _emailController.text,
+          password: _passwordController.text,
+        ),),
+    );
+  }
+
+  
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +69,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 Column(
                   children: [
                     const Text(
-                      'Create Your Profile',
+                      'Create Account',
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
@@ -50,7 +79,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      "Let's get you set up to discover great movies.",
+                      'Step 1 of 2: Enter your credentials',
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.white.withOpacity(0.7),
@@ -60,58 +89,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ],
                 ),
                 const SizedBox(height: 40),
-                // Profile Picture Placeholder (Removed as per requirement)
-                // Full Name Field
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Full Name',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white.withOpacity(0.9),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextField(
-                      controller: _fullNameController,
-                      style: const TextStyle(color: Colors.white),
-                      decoration: InputDecoration(
-                        hintText: 'Enter your full name',
-                        hintStyle: TextStyle(
-                          color: Colors.white.withOpacity(0.5),
-                        ),
-                        filled: true,
-                        fillColor: Colors.white.withOpacity(0.1),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
-                            color: Colors.white.withOpacity(0.2),
-                          ),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(
-                            color: Colors.white.withOpacity(0.2),
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: const BorderSide(
-                            color: Color(0xFF7F0DF2),
-                            width: 2,
-                          ),
-                        ),
-                        contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 16,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
                 // Email Field
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -294,17 +271,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ],
                 ),
                 const SizedBox(height: 32),
-                // Create Account Button
+                // Continue Button
                 SizedBox(
                   width: double.infinity,
                   height: 56,
                   child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const LoginScreen()),
-                      );
-                    },
+                    onPressed: _signup,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF7F0DF2),
                       foregroundColor: Colors.white,
@@ -314,7 +286,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       elevation: 0,
                     ),
                     child: const Text(
-                      'Create Account',
+                      'Continue',
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -326,12 +298,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 // Sign In Link
                 TextButton(
                   onPressed: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const LoginScreen(),
-                      ),
-                    );
+                    Navigator.pop(context);
                   },
                   style: TextButton.styleFrom(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -353,43 +320,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                // Terms and Privacy
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      text: 'By creating an account, you agree to our ',
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.5),
-                        fontSize: 12,
-                      ),
-                      children: const [
-                        TextSpan(
-                          text: 'Terms of Service',
-                          style: TextStyle(
-                            color: Color(0xFF7F0DF2),
-                            decoration: TextDecoration.underline,
-                          ),
-                        ),
-                        TextSpan(
-                          text: ' and ',
-                        ),
-                        TextSpan(
-                          text: 'Privacy Policy',
-                          style: TextStyle(
-                            color: Color(0xFF7F0DF2),
-                            decoration: TextDecoration.underline,
-                          ),
-                        ),
-                        TextSpan(
-                          text: '.',
                         ),
                       ],
                     ),
