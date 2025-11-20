@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'onboarding_card.dart';
 import 'onboarding_item.dart';
 import '../login/login_screen.dart';
-import '../signup/signup_screen.dart';
+import '../signup/signup_step1_screen.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -76,7 +76,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     // TODO: Create and navigate to signup screen
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const SignUpScreen()),
+      MaterialPageRoute(builder: (context) => const SignUpStep1Screen()),
     );
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import'../signup/signup_screen.dart';
+import'../signup/signup_step1_screen.dart';
 import '../HomePage/home_screen.dart';
+import '../../service/login_services.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -10,16 +11,37 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController email = TextEditingController();
+  final TextEditingController password = TextEditingController();
   bool _isPasswordVisible = false;
+  final AuthService _authService = AuthService();
 
   @override
   void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
+    email.dispose();
+    password.dispose();
     super.dispose();
   }
+ void _login() async {
+  final result = await _authService.login(
+    email: email.text,
+    password: password.text,
+  );
+
+  if (result != null) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(result)),
+    );
+  } else {
+    // Navigate to home page and remove login page from stack
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const HomeScreen()), // Replace with your actual home page widget
+      );
+    }
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const SizedBox(height: 8),
                         TextField(
-                          controller: _emailController,
+                          controller: email,
                           keyboardType: TextInputType.emailAddress,
                           style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
@@ -173,7 +195,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const SizedBox(height: 8),
                         TextField(
-                          controller: _passwordController,
+                          controller: password,
                           obscureText: !_isPasswordVisible,
                           style: const TextStyle(color: Colors.white),
                           decoration: InputDecoration(
@@ -251,12 +273,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       width: double.infinity,
                       height: 56,
                       child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const HomeScreen()),
-                          );
-                        },
+                        onPressed: _login,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF7F0DF2),
                           foregroundColor: Colors.white,
@@ -310,7 +327,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const SignUpScreen()),
+                        MaterialPageRoute(builder: (context) => const SignUpStep1Screen()),
                       );
                     },
                       style: TextButton.styleFrom(
